@@ -38,12 +38,6 @@ type Entity struct {
 	Presets     []EntityPreset  `json:"presets,omitempty"`
 }
 
-type EntityPreset struct {
-	Description string `json:"description"`
-	Name        string `json:"name"`
-	Value       int    `json:"value"`
-}
-
 type EntityFeature struct {
 	Access      int    `json:"access"`
 	Description string `json:"description"`
@@ -56,4 +50,10 @@ type EntityFeature struct {
 	ValueToggle string `json:"value_toggle,omitempty"`
 	ValueMax    int    `json:"value_max,omitempty"`
 	ValueMin    int    `json:"value_min,omitempty"`
+}
+
+type EntityPreset struct {
+	Description string `json:"description"`
+	Name        string `json:"name"`
+	Value       int    `json:"value"`
 }

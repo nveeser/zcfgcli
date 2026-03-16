@@ -1,5 +1,7 @@
 package meta
 
+import "strings"
+
 type Device struct {
 	FriendlyName       string     `json:"friendly_name"`
 	IeeeAddress        string     `json:"ieee_address"`
@@ -17,6 +19,12 @@ type Device struct {
 	Supported          bool       `json:"supported"`
 	Definition         Definition `json:"definition"`
 	Endpoints          map[string]Endpoint
+}
+
+func (d Device) Name() string { return d.FriendlyName }
+
+func (d Device) Filename() string {
+	return strings.ToLower(strings.Join(strings.Fields(d.FriendlyName), "_"))
 }
 
 func (d Device) FindEntity(name string) (Entity, bool) {
