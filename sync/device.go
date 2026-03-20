@@ -62,6 +62,8 @@ func (d *Device) ToNode() (*yaml.Node, error) {
 			return nil, err
 		}
 		keyNode.HeadComment = comment
+		keyNode.Style = yaml.FlowStyle
+
 		filteredContent = append(filteredContent, keyNode, valueNode)
 	}
 	mapNode.Content = filteredContent
