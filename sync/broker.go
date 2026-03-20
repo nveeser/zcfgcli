@@ -75,9 +75,8 @@ func findProperty(d meta.Device) (string, bool) {
 	return props[0], true
 }
 
-func (c *Broker) PushDevice(d *Device, config map[string]any) error {
+func (c *Broker) PushDevice(d meta.Device, config map[string]any) error {
 	topic := fmt.Sprintf("zigbee2mqtt/%s/set", d.Name())
-	log.Printf("Pushing topic")
 	return c.pushTopic(topic, config)
 }
 

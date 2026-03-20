@@ -40,22 +40,25 @@ func (c *applyCmd) Run(cmd *cobra.Command, args []string) error {
 		if serverDevice == nil {
 			continue
 		}
-		var config map[string]any
+		var updates map[string]any
+		log.Printf("%s - Update", descriptor.Name())
 		sync.Compare(serverDevice, localDevice, func(key string, before, after any) {
-			if config == nil {
+			if updates == nil {
 				log.Printf(descriptor.Name())
-				config = make(map[string]any)
+				updates = make(map[string]any)
 			}
-			config[key] = after
-			log.Printf("\t%s %v => %v", key, before, after)
+			updates[key] = after
 		})
-		if config == nil {
+		if updates == nil {
 			log.Printf("NoOp %s", descriptor.Name())
 			continue
 		}
-		log.Printf("Applying config for %s", descriptor.Name())
-		if err := s.PushDevice(localDevice, config); err != nil {
-			log.Printf("Error applying config for %s: %v", descriptor.Name(), err)
+		for k, v := range updates {
+			config := map[string]any{k: v}
+			log.Printf("\t%s %v => %v", k, serverDevice.Config()[k], v)
+			if err := s.PushDevice(localDevice.Descriptor(), config); err != nil {
+				log.Printf("Error applying config for %s: %v", descriptor.Name(), err)
+			}
 		}
 	}
 	return nil
