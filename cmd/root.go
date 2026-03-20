@@ -3,6 +3,7 @@ package cmd
 import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/spf13/cobra"
+	"os"
 	"time"
 	"zcfgcli/sync"
 )
@@ -18,10 +19,14 @@ func NewRoot() *cobra.Command {
 	var args config
 
 	var rootCmd = &cobra.Command{Use: "zcfgcli"}
-	rootCmd.PersistentFlags().StringVar(&args.outputDir, "config", "../devcfg", "Root path to store configuration")
-	rootCmd.PersistentFlags().StringVar(&args.user, "user", "", "User name for MQTT server")
-	rootCmd.PersistentFlags().StringVar(&args.password, "password", "", "password for MQTT server")
-	rootCmd.PersistentFlags().StringVar(&args.broker, "broker", "tcp://10.80.0.100:1883", "MQTT broker address")
+	rootCmd.PersistentFlags().StringVar(&args.outputDir, "config",
+		os.Getenv("Z2M_CONFIG"), "Root path to store configuration")
+	rootCmd.PersistentFlags().StringVar(&args.user, "user",
+		os.Getenv("Z2M_USER"), "User name for MQTT server")
+	rootCmd.PersistentFlags().StringVar(&args.password, "password",
+		os.Getenv("Z2M_PASSWORD"), "password for MQTT server")
+	rootCmd.PersistentFlags().StringVar(&args.broker, "broker",
+		os.Getenv("Z2M_BROKER"), "MQTT broker address")
 
 	rootCmd.AddCommand(syncCmd{&args}.command())
 	rootCmd.AddCommand(applyCmd{&args}.command())
